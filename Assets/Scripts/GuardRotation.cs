@@ -7,8 +7,7 @@ public class GuardRotation : MonoBehaviour
     [SerializeField] Guard guard;
     [SerializeField] Transform firepoint;
 
-    private float turnSpeed = 160;
-    private float FOV = 0.6f;
+    private float turnSpeed = 150;
 
     [Header("VFX")]
     [SerializeField] private LineRenderer linePrefab;

@@ -15,6 +15,10 @@ public class PlayerManager : MonoBehaviour
     private bool isMoving;
     private Vector2 moveInput;
     private Quaternion q;
+    private Coroutine PeakCoroutine;
+
+    private bool holdingJump;
+    private float jumpHoldTime;
 
     // Start is called before the first frame update
     void Awake() {
@@ -23,6 +27,13 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         q = Quaternion.AngleAxis(-45f, Vector3.up);
+    }
+
+    void Update() {
+        if (holdingJump)
+        {
+            jumpHoldTime += Time.deltaTime;
+        }
     }
 
     // Update is called once per frame
@@ -39,7 +50,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     void Toggle() {
-        if (health <= 0) return;
+        if (health <= 0 || PeakCoroutine != null) return;
         if (firstPlayerActive) {
             players[1].transform.position = players[0].transform.position + new Vector3(100, 0, 0);
         } else {
@@ -55,6 +66,15 @@ public class PlayerManager : MonoBehaviour
 
         firstPlayerActive = !firstPlayerActive;
     }
+    
+    private IEnumerator PeakCor() {
+        players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(false);
+        players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+        players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(true);
+        players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(false);
+        PeakCoroutine = null;
+    }
 
     public void TakeDamage() {
         GameManager.Instance.UpdateHealthUI(--health);
@@ -67,14 +87,32 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void OnMove(InputValue value) {
-        Debug.Log("Move!");
         moveInput = value.Get<Vector2>();
         isMoving = moveInput != Vector2.zero;
     }
 
     public void OnJump(InputValue value) {
-        Debug.Log("Jump!");
-        Toggle();
+        Debug.Log("hi");
+        if (value.isPressed)
+        {
+            holdingJump = true;
+            jumpHoldTime = 0f;
+        }
+        else
+        {
+            if (jumpHoldTime >= 1.0f)
+            {
+                Debug.Log("World Jump!");
+                Toggle();
+            }
+            else if (PeakCoroutine == null)
+            {
+                Debug.Log("World Peak!");
+                PeakCoroutine = StartCoroutine(PeakCor());
+            }
+
+            holdingJump = false;
+        }
     }
 
 

@@ -32,7 +32,7 @@ public class EnemyManager : MonoBehaviour
 
     private IEnumerator UpdateVariables() {
         while (true) {
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(0.33f);
             bool playerSeen = false;
             foreach (Guard g in guards) {
                 if (g.PlayerSpotted) {
@@ -44,6 +44,7 @@ public class EnemyManager : MonoBehaviour
             if (playerSeen || targetAlert) {
                 AlertAllGuards();
                 lastSpotted.position = PlayerManager.Instance.GetPlayerPos();
+                targetAlert = false;
             }
         }
     }
