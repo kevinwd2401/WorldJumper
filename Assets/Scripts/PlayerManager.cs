@@ -54,6 +54,16 @@ public class PlayerManager : MonoBehaviour
         firstPlayerActive = !firstPlayerActive;
     }
 
+    public void TakeDamage() {
+        GameManager.Instance.UpdateHealthUI(--health);
+        if (health <= 0) {
+            GameManager.Instance.LossScreen();
+        }
+    }
+    public Vector3 GetPlayerPos() {
+        return players[firstPlayerActive ? 0 : 1].transform.position;
+    }
+
     public void OnMove(InputValue value) {
         Debug.Log("Move!");
         moveInput = value.Get<Vector2>();
