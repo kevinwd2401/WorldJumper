@@ -17,7 +17,6 @@ public class PlayerManager : MonoBehaviour
     private bool isMoving;
     private Vector2 moveInput;
     private Quaternion q;
-    private Coroutine PeakCoroutine;
 
     private bool holdingJump;
     private float jumpHoldTime;
@@ -39,7 +38,10 @@ public class PlayerManager : MonoBehaviour
             if (jumpHoldTime > 1.0f) {
                 if (Toggle()) {
                     Debug.Log("World Jump!");
-                } else {Debug.Log("Jump Failed!");}
+                } else {
+                    Debug.Log("Jump Failed!");
+                    WorldPeak(false);
+                }
 
                 holdingJump = false;
                 jumpHoldTime = 0;
@@ -62,7 +64,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     bool Toggle() {
-        if (health <= 0 || PeakCoroutine != null) return false;
+        if (health <= 0) return false;
         realigPos();
         if (players[firstPlayerActive ? 1 : 0].CheckCollision()) return false;
 
@@ -75,16 +77,11 @@ public class PlayerManager : MonoBehaviour
         firstPlayerActive = !firstPlayerActive;
         return true;
     }
-    
-    private IEnumerator PeakCor() {
+    private void WorldPeak(bool enter) {
         realigPos();
 
-        players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(false);
-        players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(true);
-        yield return new WaitForSeconds(0.4f);
-        players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(true);
-        players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(false);
-        PeakCoroutine = null;
+        players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(!enter);
+        players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(enter);
     }
 
     public void TakeDamage() {
@@ -115,13 +112,13 @@ public class PlayerManager : MonoBehaviour
         {
             holdingJump = true;
             jumpHoldTime = 0f;
+            WorldPeak(true);
         }
         else
         {
-            if (holdingJump && jumpHoldTime < 1.0f && PeakCoroutine == null)
+            if (holdingJump && jumpHoldTime < 1.0f)
             {
-                Debug.Log("World Peak!");
-                PeakCoroutine = StartCoroutine(PeakCor());
+                WorldPeak(false);
             }
 
             holdingJump = false;
