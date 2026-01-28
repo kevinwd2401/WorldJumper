@@ -8,6 +8,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] Guard[] guards;
     [SerializeField] Target target;
 
+    private bool targetAlert;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,10 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void TargetAlert() {
+        targetAlert = true;
+    }
+
     private IEnumerator UpdateVariables() {
         while (true) {
             yield return new WaitForSeconds(2.0f);
@@ -35,7 +41,7 @@ public class EnemyManager : MonoBehaviour
                 }
             }
 
-            if (playerSeen) {
+            if (playerSeen || targetAlert) {
                 AlertAllGuards();
                 lastSpotted.position = PlayerManager.Instance.GetPlayerPos();
             }

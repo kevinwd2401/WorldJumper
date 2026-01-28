@@ -6,6 +6,7 @@ public class Guard : MonoBehaviour
 {
     private EnemyManager em;
     [SerializeField] float speed;
+    [SerializeField] Transform gunTransform;
 
     [SerializeField] Transform[] patrolPoints;
 
@@ -20,6 +21,7 @@ public class Guard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerSpotted = false;
         state = EnemyState.Patrol;
     }
 
@@ -34,6 +36,18 @@ public class Guard : MonoBehaviour
     }
     public void AlertGuard() {
         state = EnemyState.Alert;
+        ToggleGun(true);
+    }
+    public void PlayerSighted() {
+        playerSpotted = true;
+    }
+
+    public void ToggleGun(bool alert) {
+        if (alert) {
+            gunTransform.rotation = Quaternion.identity;
+        } else {
+            gunTransform.eulerAngles = new Vector3(46.3846626f,304.399933f,313.403015f);
+        }
     }
     
 }

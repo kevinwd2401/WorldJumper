@@ -17,9 +17,11 @@ public class PlayerManager : MonoBehaviour
     private Quaternion q;
 
     // Start is called before the first frame update
+    void Awake() {
+        Instance = this;
+    }
     void Start()
     {
-        Instance = this;
         q = Quaternion.AngleAxis(-45f, Vector3.up);
     }
 
