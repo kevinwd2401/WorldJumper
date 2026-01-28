@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timer;
     public TextMeshProUGUI loseText;
     public GameObject loseScreen, winScreen;
+
+    private bool restarting;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +36,17 @@ public class GameManager : MonoBehaviour
     public void LossScreen() {
         Time.timeScale = 0;
         loseScreen.SetActive(true);
+        if (!restarting) {
+            StartCoroutine(RestartCor());
+        }
+    }
+
+    private IEnumerator RestartCor() {
+        restarting = true;
+        yield return new WaitForSecondsRealtime(2.0f); 
+        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1.0f;
     }
 
     public void PortalEntered() {

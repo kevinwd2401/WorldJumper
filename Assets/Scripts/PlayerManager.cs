@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
     public Slider jumpBar;
+    public Material activeMat, disabledMat;
     [SerializeField] private Player[] players;
     [SerializeField] bool firstPlayerActive = true;
 
@@ -35,6 +36,8 @@ public class PlayerManager : MonoBehaviour
         {
             jumpHoldTime += Time.deltaTime;
             jumpBar.value = jumpHoldTime;
+            realigPos();
+
             if (jumpHoldTime > 1.0f) {
                 if (Toggle()) {
                     Debug.Log("World Jump!");
@@ -70,9 +73,11 @@ public class PlayerManager : MonoBehaviour
 
         players[firstPlayerActive ? 0 : 1].TogglePlayer(false);
         players[firstPlayerActive ? 0 : 1].cam.gameObject.SetActive(false);
+        players[firstPlayerActive ? 0 : 1].gameObject.GetComponent<MeshRenderer>().material = disabledMat;
 
         players[firstPlayerActive ? 1 : 0].TogglePlayer(true);
         players[firstPlayerActive ? 1 : 0].cam.gameObject.SetActive(true);
+        players[firstPlayerActive ? 1 : 0].gameObject.GetComponent<MeshRenderer>().material = activeMat;
 
         firstPlayerActive = !firstPlayerActive;
         return true;
