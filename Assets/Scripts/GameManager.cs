@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Instance = this;
-        totalTargets = 1;
+        totalTargets = 2;
         targets = totalTargets;
 
         StartCoroutine(TimerCor());
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         loseScreen.SetActive(true);
     }
+
     public void PortalEntered() {
         Time.timeScale = 0;
         winScreen.SetActive(true);

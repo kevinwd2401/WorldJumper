@@ -111,7 +111,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void OnJump(InputValue value) {
-        Debug.Log("hi");
         if (value.isPressed)
         {
             holdingJump = true;
