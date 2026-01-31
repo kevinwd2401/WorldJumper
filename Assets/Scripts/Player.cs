@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
 
     public bool CheckCollision() {
         // return true if there is collision
-        return Physics.CheckSphere(transform.position, 0.52f, 1 << 6, QueryTriggerInteraction.Ignore);
+        return Physics.CheckSphere(transform.position, 0.4f, 1 << 6, QueryTriggerInteraction.Ignore);
     }
 
     public void DeathAnimation() {
