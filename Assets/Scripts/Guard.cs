@@ -143,6 +143,13 @@ public class Guard : Pathfinding
         
     }
     
+    void OnCollisionEnter(Collision c) {
+        if (c.gameObject.CompareTag("Player")) {
+            PlayerManager.Instance.TakeDamage();
+            PlayerManager.Instance.TakeDamage();
+            PlayerManager.Instance.TakeDamage();
+        }
+    }
 }
 
 public enum EnemyState

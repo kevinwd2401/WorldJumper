@@ -42,7 +42,6 @@ public class PostEffects : MonoBehaviour
     }
 
     private IEnumerator IncreaseChromaCor() {
-        ca.intensity.overrideState = true;
         float val = ca.intensity.value;
         resetChromaFlag = false;
 
