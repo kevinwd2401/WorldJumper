@@ -43,9 +43,11 @@ public class PlayerManager : MonoBehaviour
             if (jumpHoldTime > 1.0f) {
                 if (Toggle()) {
                     Debug.Log("World Jump!");
+                    GameManager.Instance.JumpSuccessText();
                 } else {
                     Debug.Log("Jump Failed!");
                     WorldPeak(false);
+                    GameManager.Instance.JumpFailedText();
                 }
 
                 holdingJump = false;

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     public Slider healthbar;
     public TextMeshProUGUI objective;
+    public TextMeshProUGUI jumpText;
     public TextMeshProUGUI timer;
     public TextMeshProUGUI loseText;
     public GameObject loseScreen, winScreen;
@@ -80,5 +81,35 @@ public class GameManager : MonoBehaviour
 
         loseText.text = "You Lose";
         LossScreen();
+    }
+
+    public void JumpSuccessText() {
+        jumpText.text = "Jump Successful";
+        jumpText.color = new Color(0.73f, 1f, 0.77f, 1f);
+        StartCoroutine(FadeTextCor());
+    }
+
+    public void JumpFailedText() {
+        jumpText.text = "Jump Failed";
+        jumpText.color = new Color(1f, 0.1f, 0f, 1f);
+        StartCoroutine(FadeTextCor());
+    }
+
+    private IEnumerator FadeTextCor() {
+        float t = 0;
+        float alpha = 1f;
+
+        while (t < 0.6f) {
+            alpha = 1 - t / 0.6f;
+            Color c = jumpText.color;
+            c.a = alpha;
+            jumpText.color = c;
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        Color final = jumpText.color;
+        final.a = 0;
+        jumpText.color = final;
     }
 }
