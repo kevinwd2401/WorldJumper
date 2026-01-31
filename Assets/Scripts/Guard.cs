@@ -90,7 +90,11 @@ public class Guard : Pathfinding
                 }
             } else if (state == EnemyState.Alert) {
                 if (hasReachedDest()) {
-                    destination = getRandomNavPoint(em.lastSpotted.position, (Random.value > 0.5f) ? 5 : 30);
+                    Vector3 playerPos = PlayerManager.Instance.GetPlayerPos();
+                    if (Vector3.Distance(playerPos, transform.position) > 25) {
+                        playerPos = em.lastSpotted.position;
+                    }
+                    destination = getRandomNavPoint((Random.value > 0.3f) ? em.lastSpotted.position : playerPos, (Random.value > 0.5f) ? 5 : 30);
                     agent.SetDestination(destination);
                 }
             } else if (state == EnemyState.Patrol) {

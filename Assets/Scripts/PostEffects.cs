@@ -70,9 +70,9 @@ public class PostEffects : MonoBehaviour
     }
     private IEnumerator MinusLensCor() {
         float val = lens.intensity.value;
-        float speed = Mathf.Abs(-0.7f - val);
+        float speed = Mathf.Abs(-0.8f - val);
 
-        while (val > -0.7f) {
+        while (val > -0.8f) {
             lens.intensity.value = val;
             val -= Time.deltaTime * speed;
             yield return null;
