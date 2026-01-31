@@ -63,7 +63,7 @@ public class Guard : Pathfinding
         if (alert) {
             gunTransform.localRotation = Quaternion.identity;
         } else {
-            gunTransform.localEulerAngles = new Vector3(46.3846626f,304.399933f,313.403015f);
+            gunTransform.localEulerAngles = new Vector3(35.048687f,292.185242f,320.988861f);
         }
     }
 
@@ -77,8 +77,17 @@ public class Guard : Pathfinding
         int index = 1;
         while (true) {
             if (playerSpotted) {
-                destination = getRandomNavPoint(PlayerManager.Instance.GetPlayerPos(), 2);
-                agent.SetDestination(destination);
+                Vector3 playerPos = PlayerManager.Instance.GetPlayerPos();
+                if (Vector3.Distance(playerPos, transform.position) > 25) {
+                    destination = getRandomNavPoint(patrolPoints[index++].position, 4);
+                    agent.SetDestination(destination);
+                    if (index >= patrolPoints.Length) {
+                        index = 0;
+                    }
+                } else {
+                    destination = getRandomNavPoint(playerPos, 2);
+                    agent.SetDestination(destination);
+                }
             } else if (state == EnemyState.Alert) {
                 if (hasReachedDest()) {
                     destination = getRandomNavPoint(em.lastSpotted.position, (Random.value > 0.5f) ? 5 : 30);
@@ -94,7 +103,7 @@ public class Guard : Pathfinding
                 }
             }
 
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(state == EnemyState.Alert ? 0.6f : 2.5f);
         }
         
     }
@@ -104,7 +113,7 @@ public class Guard : Pathfinding
         while (true) {
             Vector3 toPlayer = PlayerManager.Instance.GetPlayerPos() - transform.position;
             float dot = Vector3.Dot(enemyModel.forward, toPlayer.normalized);
-            if (dot > 0.6f) {
+            if (dot > 0.45f) {
                 if (!Physics.Raycast(
                 transform.position,
                 toPlayer.normalized,

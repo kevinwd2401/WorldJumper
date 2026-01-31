@@ -11,7 +11,8 @@ public class GuardRotation : MonoBehaviour
 
     [Header("VFX")]
     [SerializeField] private LineRenderer linePrefab;
-    [SerializeField] private float tracerDuration = 0.4f;
+    [SerializeField] private float tracerDuration = 0.25f;
+    [SerializeField] private GameObject bleedPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -50,13 +51,16 @@ public class GuardRotation : MonoBehaviour
 
     private void Shoot() {
         Vector3 origin = firepoint.position;
-        Vector3 dir = transform.forward;
+        float spreadAngle = Random.Range(-10f, 10f);
+        Vector3 dir = Quaternion.AngleAxis(spreadAngle, Vector3.up) * transform.forward;
 
         if (Physics.Raycast(origin, dir, out RaycastHit hit, 20, ~0, QueryTriggerInteraction.Ignore))
         {
             if (hit.collider.CompareTag("Player"))
             {
                 PlayerManager.Instance.TakeDamage();
+                GameObject bleed = Instantiate(bleedPrefab, hit.point, Quaternion.identity);
+                Destroy(bleed, 4);
             }
 
             SpawnAndFadeLine(origin, hit.point, tracerDuration);

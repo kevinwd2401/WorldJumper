@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Transform eyes;
     public bool worldActive;
     public Camera cam;
     Rigidbody rb;
@@ -27,6 +28,16 @@ public class Player : MonoBehaviour
 
     public void Movement(Vector3 velocity) {
         rb.AddForce(velocity, ForceMode.Acceleration);
+    }
+
+    public void RotateEyes(Vector3 dir) {
+        Quaternion targetRot = Quaternion.LookRotation(dir);
+
+        eyes.rotation = Quaternion.RotateTowards(
+            eyes.rotation,
+            targetRot,
+            240 * Time.deltaTime
+        );
     }
 
     public bool CheckCollision() {

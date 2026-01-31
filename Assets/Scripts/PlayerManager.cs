@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(PostEffects))]
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
     public Slider jumpBar;
     public Material activeMat, disabledMat;
+    private PostEffects postProcess;
     [SerializeField] private Player[] players;
     [SerializeField] bool firstPlayerActive = true;
 
     [SerializeField] int health = 5;
 
-    private float speed = 10;
+    private float speed = 8;
     private bool isMoving;
     private Vector2 moveInput;
     private Quaternion q;
@@ -29,6 +30,7 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         q = Quaternion.AngleAxis(-45f, Vector3.up);
+        postProcess = GetComponent<PostEffects>();
     }
 
     void Update() {
@@ -49,6 +51,8 @@ public class PlayerManager : MonoBehaviour
                 holdingJump = false;
                 jumpHoldTime = 0;
                 jumpBar.value = 0;
+                postProcess.ResetChroma();
+                postProcess.RestoreLens();
             }
         }
     }
@@ -57,7 +61,11 @@ public class PlayerManager : MonoBehaviour
     void FixedUpdate()
     {
         if (!isMoving || holdingJump) return;
-        players[firstPlayerActive ? 0 : 1].Movement(speed * (q * new Vector3(moveInput.x, 0f, moveInput.y)));
+        Vector3 dir = q * (new Vector3(moveInput.x, 0f, moveInput.y)).normalized;
+        players[firstPlayerActive ? 0 : 1].Movement(speed * dir);
+        
+        players[firstPlayerActive ? 0 : 1].RotateEyes(dir);
+        players[firstPlayerActive ? 1 : 0].eyes.rotation = players[firstPlayerActive ? 0 : 1].eyes.rotation;
 
         if (firstPlayerActive) {
             players[1].transform.position = players[0].transform.position + new Vector3(100, 0, 0);
@@ -91,6 +99,9 @@ public class PlayerManager : MonoBehaviour
 
     public void TakeDamage() {
         GameManager.Instance.UpdateHealthUI(--health);
+        if (health == 3) {
+            postProcess.ChangeVignetteColor(new Color (0.4f, 0f, 0f));
+        }
         if (health <= 0) {
             GameManager.Instance.LossScreen();
         }
@@ -118,6 +129,8 @@ public class PlayerManager : MonoBehaviour
             holdingJump = true;
             jumpHoldTime = 0f;
             WorldPeak(true);
+            postProcess.IncreaseChroma();
+            postProcess.MinusLens();
         }
         else
         {
@@ -128,6 +141,8 @@ public class PlayerManager : MonoBehaviour
 
             holdingJump = false;
             jumpBar.value = 0;
+            postProcess.ResetChroma();
+            postProcess.RestoreLens();
         }
     }
 
