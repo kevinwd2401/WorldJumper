@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76712053268b41c4791ba807efe2d143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portal: {fileID: 0}
+  portal: {fileID: 1575197398}
   healthbar: {fileID: 2047628718}
   objective: {fileID: 1865348333}
   jumpText: {fileID: 529953421}
@@ -11562,6 +11562,12 @@ PrefabInstance:
 --- !u!4 &1575197397 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1806277894783663281, guid: 94074532377f41949859c4524372ba5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1575197396}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1575197398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8546413318755162817, guid: 94074532377f41949859c4524372ba5a,
     type: 3}
   m_PrefabInstance: {fileID: 1575197396}
   m_PrefabAsset: {fileID: 0}
