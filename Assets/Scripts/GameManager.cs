@@ -17,8 +17,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timer;
     public TextMeshProUGUI loseText;
     public GameObject loseScreen, winScreen;
+    public CanvasGroup StartCanvas;
 
     private bool restarting;
+    public bool HasNextScene;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
         targets = totalTargets;
 
         StartCoroutine(TimerCor());
+        StartCoroutine(FadeOutCanvasGroup(StartCanvas));
     }
 
     public void UpdateHealthUI(int health) {
@@ -50,9 +53,21 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f;
     }
 
+    private IEnumerator NextSceneCor() {
+        restarting = true;
+        yield return new WaitForSecondsRealtime(2.0f); 
+        
+        SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
+        Time.timeScale = 1.0f;
+    }
+
+
     public void PortalEntered() {
         Time.timeScale = 0;
         winScreen.SetActive(true);
+        if (!restarting && HasNextScene) {
+            StartCoroutine(NextSceneCor());
+        }
     }
 
     public void TargetDeath() {
@@ -85,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void JumpSuccessText() {
         jumpText.text = "Jump Successful";
-        jumpText.color = new Color(0.73f, 1f, 0.77f, 1f);
+        jumpText.color = new Color(0.72f, 1f, 0.96f, 1f);
         StartCoroutine(FadeTextCor());
     }
 
@@ -99,6 +114,8 @@ public class GameManager : MonoBehaviour
         float t = 0;
         float alpha = 1f;
 
+        yield return new WaitForSeconds(0.3f);
+
         while (t < 0.6f) {
             alpha = 1 - t / 0.6f;
             Color c = jumpText.color;
@@ -111,5 +128,21 @@ public class GameManager : MonoBehaviour
         Color final = jumpText.color;
         final.a = 0;
         jumpText.color = final;
+    }
+
+    private IEnumerator FadeOutCanvasGroup(CanvasGroup cg) {
+        float t = 0;
+        float alpha = 1f;
+
+        yield return new WaitForSeconds(0.2f);
+
+        while (t < 0.7f) {
+            alpha = 1 - t / 0.7f;
+            cg.alpha = alpha;
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        cg.alpha = 0;
     }
 }
