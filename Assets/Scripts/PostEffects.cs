@@ -16,6 +16,9 @@ public class PostEffects : MonoBehaviour
     private bool lensCharging;
     private Coroutine minusLensCoroutine, restoreLensCoroutine;
 
+    [SerializeField] Material staticMat;
+    private Coroutine staticCoroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -120,5 +123,49 @@ public class PostEffects : MonoBehaviour
 
         return (x == 0) ? 0 : ((x == 1) ? 1
         : (Mathf.Pow(2, -10 * x) * Mathf.Sin((x * 10 - 0.75f) * c4) + 1));
+    }
+
+    public void DecreaseStatic() {
+        staticMat.SetFloat("_lines", 1);
+        staticMat.SetFloat("_noise", 0.75f);
+        
+        if (staticCoroutine == null) {
+            staticCoroutine = StartCoroutine(DecreaseStaticCor());
+        }
+    }
+    
+    private IEnumerator DecreaseStaticCor() {
+        float noiseTarget = 0.75f;
+
+        float duration = 0.4f;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            float x = t / duration;
+            staticMat.SetFloat("_lines", Mathf.Lerp(1, 0, x * x));
+            staticMat.SetFloat("_noise", Mathf.Lerp(noiseTarget, 0, x * x));
+
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        staticMat.SetFloat("_lines", 0);
+        staticMat.SetFloat("_noise", 0);
+        staticCoroutine = null;
+    }
+    public void ResetNoise() {
+        if (staticCoroutine != null) {
+            StopCoroutine(staticCoroutine);
+            staticCoroutine = null;
+        }
+        staticMat.SetFloat("_lines", 0);
+        staticMat.SetFloat("_noise", 0);
+    }
+
+    void OnDisable()
+    {
+        staticMat.SetFloat("_lines", 0);
+        staticMat.SetFloat("_noise", 0);
     }
 }

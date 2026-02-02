@@ -55,9 +55,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator NextSceneCor() {
         restarting = true;
-        yield return new WaitForSecondsRealtime(2.0f); 
-        
-        SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
+        if (HasNextScene) {
+            yield return new WaitForSecondsRealtime(2.0f); 
+            SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else {
+            yield return new WaitForSecondsRealtime(6.0f); 
+            SceneManager.LoadScene (0);
+        }
         Time.timeScale = 1.0f;
     }
 
@@ -65,7 +70,7 @@ public class GameManager : MonoBehaviour
     public void PortalEntered() {
         Time.timeScale = 0;
         winScreen.SetActive(true);
-        if (!restarting && HasNextScene) {
+        if (!restarting) {
             StartCoroutine(NextSceneCor());
         }
     }

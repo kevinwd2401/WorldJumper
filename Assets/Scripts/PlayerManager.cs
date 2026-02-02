@@ -42,10 +42,8 @@ public class PlayerManager : MonoBehaviour
 
             if (jumpHoldTime > 1.0f) {
                 if (Toggle()) {
-                    Debug.Log("World Jump!");
                     GameManager.Instance.JumpSuccessText();
                 } else {
-                    Debug.Log("Jump Failed!");
                     WorldPeak(false);
                     GameManager.Instance.JumpFailedText();
                 }
@@ -55,6 +53,7 @@ public class PlayerManager : MonoBehaviour
                 jumpBar.value = 0;
                 postProcess.ResetChroma();
                 postProcess.RestoreLens();
+                postProcess.ResetNoise();
             }
         }
     }
@@ -133,6 +132,7 @@ public class PlayerManager : MonoBehaviour
             WorldPeak(true);
             postProcess.IncreaseChroma();
             postProcess.MinusLens();
+            postProcess.DecreaseStatic();
         }
         else
         {
@@ -145,6 +145,7 @@ public class PlayerManager : MonoBehaviour
             jumpBar.value = 0;
             postProcess.ResetChroma();
             postProcess.RestoreLens();
+            postProcess.ResetNoise();
         }
     }
 
