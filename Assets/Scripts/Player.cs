@@ -9,10 +9,14 @@ public class Player : MonoBehaviour
     public Camera cam;
     Rigidbody rb;
 
+    public AudioClip[] audioClips;
+    AudioSource audioS;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -38,6 +42,12 @@ public class Player : MonoBehaviour
             targetRot,
             240 * Time.deltaTime
         );
+    }
+
+    public void PlaySound(int index) {
+        audioS.Stop();
+        audioS.clip = audioClips[index];
+        audioS.Play();
     }
 
     public bool CheckCollision() {

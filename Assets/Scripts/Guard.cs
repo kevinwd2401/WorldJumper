@@ -20,6 +20,7 @@ public class Guard : Pathfinding
     public Vector3 dir => agent.desiredVelocity;
 
     private Rigidbody rb;
+    private AudioSource audioS;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class Guard : Pathfinding
         StartCoroutine(CheckPlayerVisibleCor());
         StartCoroutine(UpdateMovement());
         rb = GetComponent<Rigidbody>();
+        audioS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -145,6 +147,7 @@ public class Guard : Pathfinding
     
     void OnCollisionEnter(Collision c) {
         if (c.gameObject.CompareTag("Player")) {
+            audioS.Play();
             PlayerManager.Instance.TakeDamage();
             PlayerManager.Instance.TakeDamage();
             PlayerManager.Instance.TakeDamage();

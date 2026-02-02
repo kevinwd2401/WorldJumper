@@ -42,9 +42,11 @@ public class PlayerManager : MonoBehaviour
 
             if (jumpHoldTime > 1.0f) {
                 if (Toggle()) {
+                    players[firstPlayerActive ? 0 : 1].PlaySound(0);
                     GameManager.Instance.JumpSuccessText();
                 } else {
                     WorldPeak(false);
+                    players[firstPlayerActive ? 0 : 1].PlaySound(2);
                     GameManager.Instance.JumpFailedText();
                 }
 

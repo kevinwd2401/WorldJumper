@@ -1181,6 +1181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf55522a28efad4db13f5083574c199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BGMPrefab: {fileID: 870608092916089594, guid: 71748468fbc94fd4986d4370d1af8bfb,
+    type: 3}
   volume: {fileID: 1289026030}
   enemyMesh: {fileID: 7381127201166165676}
 --- !u!1 &543237057

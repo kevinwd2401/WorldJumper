@@ -7,6 +7,7 @@ using UnityEngine.Rendering.Universal;
 
 public class MainMenu : MonoBehaviour
 {
+    public GameObject BGMPrefab;
     [SerializeField] private Volume volume;
     private ChromaticAberration ca;
 
@@ -21,6 +22,9 @@ public class MainMenu : MonoBehaviour
         }
         StartCoroutine(ChromaCor());
         StartCoroutine(TurnCor());
+
+        GameObject sound = Instantiate(BGMPrefab);
+        DontDestroyOnLoad(sound);
     }
 
     // Update is called once per frame

@@ -14,9 +14,12 @@ public class GuardRotation : MonoBehaviour
     [SerializeField] private float tracerDuration = 0.25f;
     [SerializeField] private GameObject bleedPrefab;
 
+    private AudioSource audioS;
+
     // Start is called before the first frame update
     void Start()
     {
+        audioS = GetComponent<AudioSource>();
         StartCoroutine(ShootCor());
     }
 
@@ -63,6 +66,7 @@ public class GuardRotation : MonoBehaviour
                 Destroy(bleed, 4);
             }
 
+            audioS.Play();
             SpawnAndFadeLine(origin, hit.point, tracerDuration);
         }
     }

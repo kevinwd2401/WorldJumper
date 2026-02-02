@@ -143,15 +143,12 @@ public class PostEffects : MonoBehaviour
         while (t < duration)
         {
             float x = t / duration;
-            staticMat.SetFloat("_lines", Mathf.Lerp(1, 0, x * x));
-            staticMat.SetFloat("_noise", Mathf.Lerp(noiseTarget, 0, x * x));
+            staticMat.SetFloat("_lines", Mathf.Lerp(1, 0.1f, x));
+            staticMat.SetFloat("_noise", Mathf.Lerp(noiseTarget, 0.05f, x));
 
             t += Time.deltaTime;
             yield return null;
         }
-
-        staticMat.SetFloat("_lines", 0);
-        staticMat.SetFloat("_noise", 0);
         staticCoroutine = null;
     }
     public void ResetNoise() {

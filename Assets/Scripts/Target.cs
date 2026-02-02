@@ -42,6 +42,9 @@ public class Target : Pathfinding
 
     void OnCollisionEnter(Collision c) {
         if (c.gameObject.CompareTag("Player")) {
+            if (c.gameObject.TryGetComponent<Player>(out Player p)) {
+                p.PlaySound(1);
+            }
             Die();
         }
     }
