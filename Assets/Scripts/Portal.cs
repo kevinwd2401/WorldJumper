@@ -7,10 +7,10 @@ public class Portal : MonoBehaviour
     [SerializeField] Transform mesh;
 
     void Start() {
-        StartCoroutine(Oscillate());
+        StartCoroutine(Grow());
     }
     private IEnumerator Oscillate() {
-        float startVal = mesh.localScale.x;
+        float startVal = mesh.localScale.x - 0.4f;
         float currVal;
         float t = 0;
         while (true) {
@@ -19,6 +19,18 @@ public class Portal : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
+    }
+
+    private IEnumerator Grow() {
+        float startVal = 0.01f;
+        float endVal = mesh.localScale.x + 0.4f;
+        float t = 0;
+        while (t < 1) {
+            mesh.localScale = Mathf.Lerp(startVal, endVal, t) * Vector3.one;
+            t += Time.deltaTime;
+            yield return null;
+        }
+        StartCoroutine(Oscillate());
     }
 
     void OnTriggerEnter(Collider c) {
