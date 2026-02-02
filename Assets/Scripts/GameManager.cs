@@ -104,13 +104,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void JumpSuccessText() {
-        jumpText.text = "Jump Successful";
+        jumpText.text = "Phase Successful";
         jumpText.color = new Color(0.72f, 1f, 0.96f, 1f);
         StartCoroutine(FadeTextCor());
     }
 
     public void JumpFailedText() {
-        jumpText.text = "Jump Failed";
+        jumpText.text = "Could Not Phase";
         jumpText.color = new Color(1f, 0.1f, 0f, 1f);
         StartCoroutine(FadeTextCor());
     }

@@ -109,7 +109,7 @@ public class Guard : Pathfinding
                 }
             }
 
-            yield return new WaitForSeconds(state == EnemyState.Alert ? 0.6f : 2.5f);
+            yield return new WaitForSeconds(state == EnemyState.Alert ? 0.5f : 2.5f);
         }
         
     }
@@ -140,7 +140,7 @@ public class Guard : Pathfinding
                     playerSpotted = false;
                 }
             }
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.5f);
         }
         
     }
