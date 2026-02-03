@@ -12,7 +12,7 @@ public class Guard : Pathfinding
     [SerializeField] Transform[] patrolPoints;
 
     [SerializeField] private float alertTimer;
-    private bool playerSpotted;
+    private bool playerSpotted, positionUpdateNecessary;
     public bool PlayerSpotted => playerSpotted;
 
     public EnemyState state;
@@ -87,11 +87,14 @@ public class Guard : Pathfinding
                         index = 0;
                     }
                 } else {
+                    positionUpdateNecessary = false;
                     destination = getRandomNavPoint(playerPos, 2);
                     agent.SetDestination(destination);
                 }
             } else if (state == EnemyState.Alert) {
-                if (hasReachedDest()) {
+                if (positionUpdateNecessary || hasReachedDest()) {
+                    positionUpdateNecessary = false;
+
                     Vector3 playerPos = PlayerManager.Instance.GetPlayerPos();
                     if (Vector3.Distance(playerPos, transform.position) > 25) {
                         playerPos = em.lastSpotted.position;
@@ -129,6 +132,8 @@ public class Guard : Pathfinding
                 QueryTriggerInteraction.Ignore))
                 {
                     playerSpotted = true;
+                    positionUpdateNecessary = true;
+
                     if (state != EnemyState.Alert) {
                         AlertGuard();
                     } else {
